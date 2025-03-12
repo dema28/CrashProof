@@ -15,7 +15,13 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y xvfb
+          pip install -r requirements.txt
+
+      - name: Start Xvfb (UI tests)
+        run: Xvfb :99 -screen 0 1920x1080x24 &
 
       - name: Run API tests
         run: pytest tests/api --maxfail=5 --disable-warnings
@@ -25,6 +31,5 @@ jobs:
         env:
           DISPLAY: ":99.0"
 
-      - name: Start Xvfb (UI tests)
-        run: Xvfb :99 -screen 0 1920x1080x24 &
-
+      - name: Check Xvfb process
+        run: ps aux | grep Xvfb
