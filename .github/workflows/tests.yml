@@ -17,7 +17,7 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb
+          sudo apt-get install -y xvfb wget unzip
           pip install -r requirements.txt
 
       - name: Run API tests
@@ -28,3 +28,4 @@ jobs:
         env:
           DISPLAY: ":99.0"
 
+    
