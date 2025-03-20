@@ -20,24 +20,6 @@ jobs:
           sudo apt-get install -y xvfb wget unzip
           pip install -r requirements.txt
 
-      - name: Install specific Chrome version (128.0.6613.120)
-        run: |
-          wget https://dl.google.com/linux/chrome/deb/pool/main/g/google-chrome-stable/google-chrome-stable_128.0.6613.120-1_amd64.deb
-          sudo apt-get install ./google-chrome-stable_128.0.6613.120-1_amd64.deb
-
-      - name: Install specific ChromeDriver version (128.0.6613.120)
-        run: |
-          CHROMEDRIVER_VERSION="128.0.6613.120"
-          wget -N "https://chromedriver.storage.googleapis.com/$CHROMEDRIVER_VERSION/chromedriver_linux64.zip"
-          unzip chromedriver_linux64.zip
-          sudo mv chromedriver /usr/local/bin/chromedriver
-          sudo chmod +x /usr/local/bin/chromedriver
-
-      - name: Start Xvfb (UI tests)
-        run: |
-          Xvfb :99 -screen 0 1920x1080x24 &
-          export DISPLAY=":99.0"
-
       - name: Run API tests
         run: pytest tests/api --maxfail=5 --disable-warnings
 
@@ -46,5 +28,4 @@ jobs:
         env:
           DISPLAY: ":99.0"
 
-      - name: Check Xvfb process
-        run: ps aux | grep Xvfb
+    
