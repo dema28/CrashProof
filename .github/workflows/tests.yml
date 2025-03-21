@@ -35,4 +35,8 @@ jobs:
 
       - name: Run UI tests
         run: |
-          python -m unittest tests/ui/test_buttons.py
+          python -m unittest discover -s tests/ui
+
+      - name: Run API tests
+        run: |
+          python -m unittest discover -s tests/api -p "api_*.py"
