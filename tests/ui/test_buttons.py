@@ -29,7 +29,7 @@ class SimpleUITest(unittest.TestCase):
         actions = ActionChains(self.driver)
         actions.double_click(btn_double_click).perform()
 
-        time.sleep(1)
+        time.sleep(2)
 
         try:
             message = self.wait.until(
