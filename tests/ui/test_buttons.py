@@ -24,17 +24,13 @@ class SimpleUITest(unittest.TestCase):
     def test_btn_double_click(self):
         self.driver.get("https://demoqa.com/buttons")
 
-        # Ожидание кликабельности перед кликом
-        btn_double_click = self.wait.until(
-            EC.element_to_be_clickable((By.ID, "doubleClickBtn"))
-        )
+        btn_double_click = self.wait.until(EC.element_to_be_clickable((By.ID, "doubleClickBtn")))
 
         actions = ActionChains(self.driver)
         actions.double_click(btn_double_click).perform()
 
-        time.sleep(1)  # Временное ожидание для диагностики
+        time.sleep(1)
 
-        # Выводим страницу в лог, если элемент не найден
         try:
             message = self.wait.until(
                 EC.visibility_of_element_located((By.ID, "doubleClickMessage"))
