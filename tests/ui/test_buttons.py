@@ -1,6 +1,6 @@
 import unittest
 from selenium import webdriver
-from selenium.webdriver.chrome.options import Options
+from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
@@ -11,7 +11,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 class SimpleUITest(unittest.TestCase):
 
     def setUp(self):
-        chrome_options = Options()
+        chrome_options = webdriver.ChromeOptions()
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--no-sandbox")
@@ -19,7 +19,7 @@ class SimpleUITest(unittest.TestCase):
         chrome_options.add_argument("--user-data-dir=/tmp/chrome-profile")
 
         # Используем webdriver-manager для автоматической установки ChromeDriver
-        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
+        self.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
 
     def test_btn_double_click(self):
         self.driver.get("https://demoqa.com/buttons")
