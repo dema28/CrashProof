@@ -25,6 +25,6 @@ jobs:
         run: pytest tests/api
 
       - name: Run UI tests (Headless Mode)
-        run: pytest/ui
+        run: pytest
 
     
