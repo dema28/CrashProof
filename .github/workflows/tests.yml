@@ -19,7 +19,6 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y xvfb wget unzip curl
-          pip install -r requirements.txt
 
       - name: Install Google Chrome
         run: |
@@ -27,10 +26,11 @@ jobs:
           sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt -fy install
           google-chrome --version
 
-      - name: Install ChromeDriver
+      - name: Install ChromeDriver (Auto-detect)
         run: |
-          CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1)
-          wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}.0.0/chromedriver_linux64.zip
+          CHROME_VERSION=$(google-chrome --version | grep -oP '\d+\.\d+\.\d+\.\d+' | head -1)
+          CHROMEDRIVER_VERSION=$(curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION" || curl -s "https://chromedriver.storage.googleapis.com/LATEST_RELEASE")
+          wget -O chromedriver_linux64.zip "https://chromedriver.storage.googleapis.com/${CHROMEDRIVER_VERSION}/chromedriver_linux64.zip"
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/local/bin/
           chromedriver --version
