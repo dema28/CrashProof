@@ -19,15 +19,12 @@ jobs:
         run: sudo apt-get install google-chrome-stable
 
       - name: Install dependencies
-        run:
-#          sudo apt-get update
-#          sudo apt-get install -y xvfb wget unzip
-          pip install -r requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Run API tests
-        run: pytest tests/api --maxfail=5 --disable-warnings
+        run: pytest tests/api
 
       - name: Run UI tests (Headless Mode)
-        run: pytest
+        run: pytest/ui
 
     
