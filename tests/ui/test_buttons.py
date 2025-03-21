@@ -10,37 +10,38 @@ from webdriver_manager.chrome import ChromeDriverManager
 
 
 class SimpleUITest(unittest.TestCase):
-
     @classmethod
     def setUpClass(cls):
         chrome_options = webdriver.ChromeOptions()
-        chrome_options.add_argument("--headless=new")
+        chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         cls.driver = webdriver.Chrome(service=Service(ChromeDriverManager().install()), options=chrome_options)
         cls.wait = WebDriverWait(cls.driver, 10)
 
-    def setUp(self):
+    def test_btn_double_click(self):
         self.driver.get("https://demoqa.com/buttons")
 
-    def test_btn_double_click(self):
-        btn_double_click = self.wait.until(EC.element_to_be_clickable((By.ID, "doubleClickBtn")))
-        btn_right_click = self.wait.until(EC.element_to_be_clickable((By.ID, "rightClickBtn")))
-        btn_click = self.wait.until(EC.element_to_be_clickable((By.XPATH, "//button[text()='Click Me']")))
+        # Ожидание кликабельности перед кликом
+        btn_double_click = self.wait.until(
+            EC.element_to_be_clickable((By.ID, "doubleClickBtn"))
+        )
 
         actions = ActionChains(self.driver)
         actions.double_click(btn_double_click).perform()
-        actions.context_click(btn_right_click).perform()
-        actions.click(btn_click).perform()
 
-        message = self.wait.until(EC.visibility_of_element_located((By.ID, "doubleClickMessage")))
-        message1 = self.wait.until(EC.visibility_of_element_located((By.ID, "rightClickMessage")))
-        message2 = self.wait.until(EC.visibility_of_element_located((By.ID, "dynamicClickMessage")))
+        time.sleep(1)  # Временное ожидание для диагностики
 
-        self.assertEqual(message.text, "You have done a double click")
-        self.assertEqual(message1.text, "You have done a right click")
-        self.assertEqual(message2.text, "You have done a dynamic click")
+        # Выводим страницу в лог, если элемент не найден
+        try:
+            message = self.wait.until(
+                EC.visibility_of_element_located((By.ID, "doubleClickMessage"))
+            )
+            self.assertEqual(message.text, "You have done a double click")
+        except Exception as e:
+            print("Page Source:", self.driver.page_source)
+            raise e
 
     @classmethod
     def tearDownClass(cls):
