@@ -5,6 +5,7 @@ on: [push, pull_request]
 jobs:
   test:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -17,16 +18,22 @@ jobs:
       - name: Install dependencies
         run: |
           sudo apt-get update
-          sudo apt-get install -y xvfb wget unzip google-chrome-stable
+          sudo apt-get install -y xvfb wget unzip curl
           pip install -r requirements.txt
+
+      - name: Install Google Chrome
+        run: |
+          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          sudo dpkg -i google-chrome-stable_current_amd64.deb || sudo apt -fy install
+          google-chrome --version
 
       - name: Install ChromeDriver
         run: |
           CHROME_VERSION=$(google-chrome --version | awk '{print $3}' | cut -d '.' -f 1)
-          wget -q "https://chromedriver.storage.googleapis.com/$(curl -s https://chromedriver.storage.googleapis.com/LATEST_RELEASE_$CHROME_VERSION)/chromedriver_linux64.zip"
+          wget https://chromedriver.storage.googleapis.com/${CHROME_VERSION}.0.0/chromedriver_linux64.zip
           unzip chromedriver_linux64.zip
           sudo mv chromedriver /usr/local/bin/
-          rm chromedriver_linux64.zip
+          chromedriver --version
 
       - name: Run API tests
         run: pytest tests/api --maxfail=5 --disable-warnings
@@ -34,5 +41,6 @@ jobs:
       - name: Run UI tests (Headless Mode)
         run: |
           Xvfb :99 -screen 0 1920x1080x24 &
-          export DISPLAY=:99
           pytest tests/ui --maxfail=5 --disable-warnings
+        env:
+          DISPLAY: ":99.0"
