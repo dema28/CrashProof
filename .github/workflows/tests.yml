@@ -15,16 +15,16 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Chrome
-        run: sudo apt-get install google-chrome-stable
+#      - name: Install Chrome
+#        run: sudo apt-get install google-chrome-stable
 
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-#      - name: Run API tests
-#        run: pytest tests/api
+      - name: Run API tests
+        run: pytest tests/api
 
-      - name: Run UI tests (Headless Mode)
-        run: pytest
+#      - name: Run UI tests (Headless Mode)
+#        run: pytest
 
     
