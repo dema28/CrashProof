@@ -1,52 +1,55 @@
-import time
 import unittest
 from selenium import webdriver
-from selenium.webdriver import ActionChains
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
+from selenium.webdriver.common.action_chains import ActionChains
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from webdriver_manager.chrome import ChromeDriverManager
 
 
 class SimpleUITest(unittest.TestCase):
 
     def setUp(self):
         chrome_options = Options()
-        # chrome_options.add_argument("--start-maximized")
         chrome_options.add_argument("--headless")
         chrome_options.add_argument("--disable-gpu")
         chrome_options.add_argument("--no-sandbox")
         chrome_options.add_argument("--disable-dev-shm-usage")
         chrome_options.add_argument("--user-data-dir=/tmp/chrome-profile")
 
-        self.driver = webdriver.Chrome(options=chrome_options)
+        # Используем webdriver-manager для автоматической установки ChromeDriver
+        self.driver = webdriver.Chrome(ChromeDriverManager().install(), options=chrome_options)
 
     def test_btn_double_click(self):
         self.driver.get("https://demoqa.com/buttons")
 
-        btn_double_click = self.driver.find_element(By.XPATH, "//*[@id='doubleClickBtn']")
-        time.sleep(1)
-        btn_right_click = self.driver.find_element(By.XPATH, "//*[@id='rightClickBtn']")
-        time.sleep(1)
-        btn_click = self.driver.find_element(By.XPATH, "//button[text()='Click Me']")
-        time.sleep(1)
+        # Ожидание и поиск элементов
+        wait = WebDriverWait(self.driver, 10)
 
+        btn_double_click = wait.until(
+            EC.presence_of_element_located((By.XPATH, "//*[@id='doubleClickBtn']"))
+        )
+        btn_right_click = wait.until(
+            EC.presence_of_element_located((By.XPATH, "//*[@id='rightClickBtn']"))
+        )
+        btn_click = wait.until(
+            EC.presence_of_element_located((By.XPATH, "//button[text()='Click Me']"))
+        )
+
+        # Выполнение действий
         actions = ActionChains(self.driver)
-
         actions.double_click(btn_double_click).perform()
         actions.context_click(btn_right_click).perform()
         actions.click(btn_click).perform()
 
-        wait = WebDriverWait(self.driver, 1)
-
+        # Проверка сообщений
         message = wait.until(
             EC.visibility_of_element_located((By.XPATH, "//*[@id='doubleClickMessage']"))
         )
-
         message1 = wait.until(
             EC.visibility_of_element_located((By.XPATH, "//*[@id='rightClickMessage']"))
         )
-
         message2 = wait.until(
             EC.visibility_of_element_located((By.XPATH, "//*[@id='dynamicClickMessage']"))
         )
@@ -63,3 +66,6 @@ class SimpleUITest(unittest.TestCase):
     def tearDown(self):
         self.driver.quit()
 
+
+if __name__ == "__main__":
+    unittest.main()
