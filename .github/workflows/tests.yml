@@ -36,4 +36,4 @@ jobs:
 
       - name: Run UI tests with pytest
         run: |
-          pytest --maxfail=1 --disable-warnings -v
+          pytest tests/ui/ --maxfail=1 --disable-warnings -v
