@@ -38,6 +38,14 @@ jobs:
         run: |
           pytest tests/ui/ --maxfail=1 --disable-warnings -v
 
+      - name: Install Allure CLI
+        run: |
+          wget https://github.com/allure-framework/allure2/releases/download/2.33.0/allure-2.33.0.tgz
+          tar -zxvf allure-2.33.0.tgz
+          sudo mv allure-2.33.0 /opt/allure
+          sudo ln -s /opt/allure/bin/allure /usr/bin/allure
+          allure --version
+
       - name: Run UI tests with Allure
         run: pytest --alluredir=allure-results
 
