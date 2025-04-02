@@ -49,6 +49,10 @@ jobs:
       - name: Run UI tests with Allure
         run: pytest --alluredir=allure-results
 
+      - name: Debag:list contents of allure-results
+        run: ls -R allure-results || echo "No results found"
+
+
       - name: Generate Allure report
         run: allure generate allure-results --clean -o allure-report
 
