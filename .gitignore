@@ -1,3 +1,4 @@
+
 # Python
 *.pyc
 *.pyo
@@ -18,8 +19,26 @@ db.sqlite3
 # Virtual environment
 venv/
 env/
+.venv/
+
+# Allure test reports
+allure-results/
+allure-report/
+
+# CI artifacts
+*.log
+*.cache
+*.coverage
+.pytest_cache/
+.tox/
 
 # IDEs
 .vscode/
 .idea/
 *.swp
+.DS_Store
+
+# OS junk
+Thumbs.db
+ehthumbs.db
+desktop.ini
