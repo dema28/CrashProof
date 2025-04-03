@@ -41,14 +41,9 @@ jobs:
         run: |
           rm -rf allure-results allure-report
 
-      - name: Run UI tests with pytest (console check)
-        run: |
-          pytest tests/ --maxfail=1 --disable-warnings -v
-          
       - name: Run UI tests with pytest
         run: |
           pytest tests/ --maxfail=1 --disable-warnings -v --capture=tee-sys
-
 
       - name: Install Allure CLI
         run: |
@@ -74,3 +69,10 @@ jobs:
         with:
           name: allure-report
           path: allure-report
+
+      - name: Upload Allure raw results
+        uses: actions/upload-artifact@v4
+        with:
+          name: allure-results
+          path: allure-results
+
