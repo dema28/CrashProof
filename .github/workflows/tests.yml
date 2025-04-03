@@ -40,7 +40,7 @@ jobs:
 
       - name: Run UI tests with pytest (console check)
         run: |
-          pytest tests/ui/ --maxfail=1 --disable-warnings -v
+          pytest tests/ --maxfail=1 --disable-warnings -v
 
       - name: Install Allure CLI
         run: |
@@ -52,7 +52,7 @@ jobs:
 
       - name: Run UI tests with Allure
         run: |
-          pytest tests/ui/ --alluredir=allure-results
+          pytest tests/ --alluredir=allure-results
 
       - name: Debug:list contents of allure-results
         run: ls -R allure-results || echo "No results found"
