@@ -47,7 +47,7 @@ jobs:
           
       - name: Run UI tests with pytest
         run: |
-          pytest tests/ui/ --maxfail=1 --disable-warnings -v --capture=tee-sys
+          pytest tests/ --maxfail=1 --disable-warnings -v --capture=tee-sys
 
 
       - name: Install Allure CLI
