@@ -10,7 +10,7 @@ class ContactPage(BasePage):
 
     URL = "https://modultest1.framer.website/kontakty"
 
-    NAME_INPUT = (By.XPATH, "//*[@name='Křestní jméno']")
+    NAME_INPUT = (By.XPATH, "//input[@name='Křestní jméno']")
     PŘÍJMENÍ= (By.XPATH, "//*[@name='Příjmení']")
     EMAIL_INPUT = (By.XPATH, "//*[@name='E-mailová adresa']")
     TELEFON = (By.XPATH, "//*[@name='Telefon']")
@@ -66,3 +66,24 @@ class ContactPage(BasePage):
     @allure.step("Проверка наличия ошибки")
     def is_error_displayed(self):
         return bool(self.driver.find_elements(*self.ERROR_MSG))
+
+    @allure.step("Проверяем, что форма невалидна при пустых обязательных полях")
+    def is_form_invalid(self):
+        try:
+            form = self.driver.find_element(By.XPATH, "//form")
+            is_valid = self.driver.execute_script("return arguments[0].checkValidity();", form)
+            if not is_valid:
+                invalid_fields = self.driver.find_elements(By.CSS_SELECTOR,
+                                                           "input:invalid, textarea:invalid, select:invalid")
+                allure.attach(
+                    f"Невалидные поля: {len(invalid_fields)}",
+                    name="HTML5 invalid fields",
+                    attachment_type=allure.attachment_type.TEXT
+                )
+                return True
+            return False
+        except Exception as e:
+            allure.attach(str(e), name="Ошибка при проверке валидации формы",
+                          attachment_type=allure.attachment_type.TEXT)
+            return False
+
