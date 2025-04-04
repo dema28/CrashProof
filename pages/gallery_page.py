@@ -37,6 +37,9 @@ class GalleryPage(BasePage):
 
     @allure.step("Получаем все альбомы")
     def get_album_elements(self):
+        WebDriverWait(self.driver, 10).until(
+            EC.presence_of_all_elements_located(self.album_links)
+        )
         return self.driver.find_elements(*self.album_links)
 
     @allure.step("Открываем альбом по индексу {index}")
