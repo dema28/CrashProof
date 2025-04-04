@@ -19,6 +19,7 @@ class ContactPage(BasePage):
     SUBMIT_BTN = (By.XPATH, "//button[@data-framer-name='Default']")
     SUCCESS_ALERT = (By.XPATH, "//p[text()='Děkujeme']")
     ERROR_MSG = (By.XPATH, "//div[contains(@class,'error')]")
+    PHONE_LINK = (By.XPATH, "//a[starts-with(@href, 'tel:')]")
 
     @allure.step("Открываем страницу контактов")
     def open(self):
@@ -87,3 +88,14 @@ class ContactPage(BasePage):
                           attachment_type=allure.attachment_type.TEXT)
             return False
 
+    @allure.step("Получаем href телефонной ссылки")
+    def get_phone_href(self):
+        try:
+            phone = self.driver.find_element(*self.PHONE_LINK)
+            href = phone.get_attribute("href")
+            allure.attach(href, name="Телефонная ссылка", attachment_type=allure.attachment_type.TEXT)
+            return href
+        except Exception as e:
+            allure.attach(str(e), name="Ошибка при получении телефонной ссылки",
+                          attachment_type=allure.attachment_type.TEXT)
+            raise
