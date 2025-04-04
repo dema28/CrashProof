@@ -8,10 +8,13 @@ import shutil
 import logging
 from datetime import datetime
 
+
 # Безопасно очищаем содержимое папок Allure и удаляем error_log.txt
 @pytest.hookimpl(tryfirst=True)
 def pytest_sessionstart(session):
-    for folder in ['allure-results', 'allure-report']:
+    project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+
+    for folder in [os.path.join(project_root, 'allure-results'), os.path.join(project_root, 'allure-report')]:
         if os.path.exists(folder):
             for filename in os.listdir(folder):
                 file_path = os.path.join(folder, filename)
@@ -26,15 +29,18 @@ def pytest_sessionstart(session):
             os.makedirs(folder)
 
     # Удаляем старый лог ошибок
-    if os.path.exists("error_log.txt"):
+    error_log = os.path.join(project_root, "error_log.txt")
+    if os.path.exists(error_log):
         try:
-            os.remove("error_log.txt")
+            os.remove(error_log)
             print("[INFO] Удалён старый error_log.txt")
         except Exception as e:
             print(f"[WARNING] Не удалось удалить error_log.txt: {e}")
 
+
 # Добавляем корень проекта в PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
+
 
 # Фикстура для WebDriver
 @pytest.fixture
@@ -46,6 +52,7 @@ def driver():
     driver = webdriver.Chrome(options=options)
     yield driver
     driver.quit()
+
 
 # Скриншот + лог ошибок в Allure и файл
 @pytest.hookimpl(hookwrapper=True)
@@ -61,8 +68,11 @@ def pytest_runtest_makereport(item):
                 allure.attach(screenshot, name="screenshot", attachment_type=allure.attachment_type.PNG)
             except Exception as e:
                 print(f"Не удалось сделать скриншот: {e}")
-        with open("error_log.txt", "a", encoding="utf-8") as f:
+        project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+        error_log = os.path.join(project_root, "error_log.txt")
+        with open(error_log, "a", encoding="utf-8") as f:
             f.write(f"[{timestamp}] Ошибка в тесте: {item.nodeid}\n")
+
 
 # Логирование начала и завершения тестов
 @pytest.fixture(autouse=True)
