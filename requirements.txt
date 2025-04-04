@@ -1,5 +1,5 @@
-selenium~=4.29.0
+selenium
 webdriver-manager
-pytest~=8.3.5
+pytest
 allure-pytest
-allure-python-commons~=2.13.5
+allure-python-commons
