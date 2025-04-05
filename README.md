@@ -36,19 +36,34 @@
 
 ```
 CrashProof/
-├── pages/                  # Page Object классы
+├── .github/workflows/             # GitHub Actions CI
+│   └── UI_Tests.yml
+├── pages/                         # Page Object классы
 │   ├── base_page.py
+│   ├── catalog_page.py
+│   ├── contact_page.py
+│   ├── gallery_album_page.py
+│   ├── gallery_page.py
 │   ├── main_page.py
-│   └── contact_page.py
-├── tests/                  # Тесты PyTest
+│   └── not_found_page.py
+├── tests/                         # Тесты PyTest
+│   ├── test_contact_form_negative.py
+│   ├── test_contact_form_positive.py
+│   ├── test_contact_phone.py
+│   ├── test_gallery_albums.py
 │   ├── test_main_page.py
-│   └── test_contact_form_*.py
-├── conftest.py             # Общие фикстуры, хуки, логика Allure
-├── requirements.txt        # Все зависимости проекта
-├── .github/workflows/      # GitHub Actions CI
-│   └── ui-tests.yml
-├── README.md               # Описание проекта
-└── README_AUTOTESTS.md     # Таблица команд и локальный запуск
+│   ├── test_main_page_mobile.py
+│   └── test_not_found_page.py
+├── configs/                       # (если используется)
+├── reports/                       # (опционально, может хранить HTML-отчёты)
+├── allure-results/                # Allure: результаты
+├── allure-report/                 # Allure: HTML отчёты
+├── conftest.py                    # Общие фикстуры, хуки, логика Allure
+├── requirements.txt               # Все зависимости проекта
+├── README.md                      # Описание проекта
+├── README_AUTOTESTS.md            # Таблица команд и локальный запуск
+├── LICENSE.txt                    # Лицензия
+└── CrashProof.png                 # Логотип проекта
 ```
 
 ---
