@@ -5,10 +5,10 @@ from pages.base_page import BasePage
 from selenium.webdriver.common.by import By
 
 
-
-
 class MainPage(BasePage):
     URL = "https://modultest1.framer.website"
+    MENU_BUTTON = (By.XPATH, "//*[@class='framer-sjc5ez']")
+    NAV_LINKS = (By.CSS_SELECTOR, "div[data-framer-name='Links'] a[href]")
 
     @allure.step("Открываем главную страницу")
     def open(self):
@@ -21,3 +21,40 @@ class MainPage(BasePage):
             return True
         except:
             return False
+
+    @allure.step("Проверяем отображение кнопки бургер-меню")
+    def is_menu_button_visible(self):
+        try:
+            return WebDriverWait(self.driver, 5).until(
+                EC.visibility_of_element_located(self.MENU_BUTTON)
+            )
+        except:
+            return False
+
+    @allure.step("Открываем меню")
+    def open_menu(self):
+        WebDriverWait(self.driver, 5).until(
+            EC.element_to_be_clickable(self.MENU_BUTTON)
+        ).click()
+
+    @allure.step("Получаем список пунктов меню")
+    def get_nav_links(self):
+        return WebDriverWait(self.driver, 5).until(
+            EC.presence_of_all_elements_located(self.NAV_LINKS)
+        )
+
+    @allure.step("Кликаем по ссылке '{link_text}'")
+    def click_nav_link_by_text(self, link_text):
+        links = self.get_nav_links()
+        for link in links:
+            if link_text.lower() in link.text.strip().lower():
+                link.click()
+                return
+        raise Exception(f"Ссылка с текстом '{link_text}' не найдена")
+
+    @allure.step("Проверяем, что URL содержит '{expected_part}'")
+    def current_url_contains(self, expected_part):
+        WebDriverWait(self.driver, 5).until(
+            EC.url_contains(expected_part)
+        )
+        return expected_part in self.driver.current_url
