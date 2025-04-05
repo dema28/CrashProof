@@ -10,7 +10,6 @@ def test_smoke_main_page(driver):
         page.open()
 
     with allure.step("Проверяем, что заголовок содержит 'Modulconstruct - Líšnice'"):
-        assert page.page_title_is_present()
-
+        assert page.page_title_is_present(), "Заголовок страницы не содержит ожидаемый текст 'Modulconstruct - Líšnice'"
 
 
