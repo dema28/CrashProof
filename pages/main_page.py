@@ -40,21 +40,27 @@ class MainPage(BasePage):
             return False
 
     @allure.step("Проверяем отображение кнопки бургер-меню")
-    @retry_on_stale()
     def is_menu_button_visible(self):
         try:
-            return WebDriverWait(self.driver, 5).until(
-                EC.visibility_of_element_located(self.MENU_BUTTON)
+            element = WebDriverWait(self.driver, 5).until(
+                EC.presence_of_element_located(self.MENU_BUTTON)
             )
+            return element.is_displayed()
         except:
             return False
 
     @allure.step("Открываем меню")
-    @retry_on_stale()
     def open_menu(self):
-        WebDriverWait(self.driver, 5).until(
-            EC.element_to_be_clickable(self.MENU_BUTTON)
-        ).click()
+        for _ in range(3):  # Ручной retry
+            try:
+                element = WebDriverWait(self.driver, 5).until(
+                    EC.element_to_be_clickable(self.MENU_BUTTON)
+                )
+                element.click()
+                return
+            except StaleElementReferenceException:
+                time.sleep(0.5)
+        raise Exception("Не удалось кликнуть по кнопке меню — stale элемент")
 
     @allure.step("Получаем список пунктов меню")
     @retry_on_stale()
