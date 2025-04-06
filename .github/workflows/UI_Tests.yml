@@ -12,6 +12,7 @@ jobs:
       USER_EMAIL: ${{ secrets.USER_EMAIL }}
       USER_PHONE: ${{ secrets.USER_PHONE }}
       USER_MESSAGE: ${{ secrets.USER_MESSAGE }}
+      USER_SUBJECT: ${{ secrets.USER_SUBJECT }}
 
     steps:
       - name: Checkout repository
@@ -46,12 +47,11 @@ jobs:
           echo "DISPLAY=:99" >> $GITHUB_ENV
 
       - name: Clean previous allure results
-        run: |
-          rm -rf allure-results allure-report
+        run: rm -rf allure-results allure-report
 
-      - name: Run UI tests with pytest
+      - name: Run UI tests with Allure
         run: |
-          pytest tests/ --maxfail=1 --disable-warnings -v --capture=tee-sys
+          pytest tests/ --alluredir=allure-results --disable-warnings -v --capture=tee-sys
 
       - name: Install Allure CLI
         run: |
@@ -61,16 +61,11 @@ jobs:
           sudo ln -s /opt/allure/bin/allure /usr/bin/allure
           allure --version
 
-      - name: Run UI tests with Allure
-        run: |
-          pytest tests/ --alluredir=allure-results
-
       - name: Debug:list contents of allure-results
         run: ls -R allure-results || echo "No results found"
 
       - name: Generate Allure report
-        run: |
-          allure generate allure-results --clean -o allure-report
+        run: allure generate allure-results --clean -o allure-report
 
       - name: Upload Allure report
         uses: actions/upload-artifact@v4
@@ -83,4 +78,3 @@ jobs:
         with:
           name: allure-results
           path: allure-results
-
