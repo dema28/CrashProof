@@ -22,16 +22,16 @@ class ContactPage(BasePage):
     ERROR_MSG = (By.XPATH, "//div[contains(@class,'error')]")
     PHONE_LINK = (By.XPATH, "//a[starts-with(@href, 'tel:')]")
 
-    @allure.step("Открываем страницу контактов")
+    @allure.step("Opening contact page")
     def open(self):
         self.driver.get(self.URL)
 
-    @allure.step("Прокручиваем к форме по XPath")
+    @allure.step("Scrolling to the form via XPath")
     def scroll_to_form(self):
         form_element = self.driver.find_element(By.XPATH, "//*[@id='formulář']")
         self.scroll_to(form_element)
 
-    @allure.step("Выбираем тему обращения: {option_text}")
+    @allure.step("Selecting subject: {option_text}: {option_text}")
     def select_subject(self, option_text):
         try:
             WebDriverWait(self.driver, 5).until(
@@ -41,10 +41,10 @@ class ContactPage(BasePage):
             self.scroll_to(dropdown._el)
             dropdown.select_by_visible_text(option_text)
         except Exception as e:
-            allure.attach(str(e), name="Ошибка при выборе из списка", attachment_type=allure.attachment_type.TEXT)
+            allure.attach(str(e), name="Error selecting from list", attachment_type=allure.attachment_type.TEXT)
             raise
 
-    @allure.step("Заполняем форму: имя='{name}', email='{email}', сообщение='{message}'")
+    @allure.step("Filling out the form: name='{name}', email='{email}', message='{message}'")
     def fill_form(self, name, email, message, příjmení, telephon):
         self.driver.find_element(*self.NAME_INPUT).send_keys(name)
         self.driver.find_element(*self.PŘÍJMENÍ).send_keys(příjmení)
@@ -52,11 +52,11 @@ class ContactPage(BasePage):
         self.driver.find_element(*self.TELEFON).send_keys(telephon)
         self.driver.find_element(*self.MESSAGE_INPUT).send_keys(message)
 
-    @allure.step("Отправляем форму")
+    @allure.step("Submitting the form")
     def submit(self):
         self.driver.find_element(*self.SUBMIT_BTN).click()
 
-    @allure.step("Проверка успешного сообщения")
+    @allure.step("Verifying success message")
     def is_success_alert_visible(self):
         try:
             element = WebDriverWait(self.driver, 10).until(
@@ -66,11 +66,11 @@ class ContactPage(BasePage):
         except TimeoutException:
             return False
 
-    @allure.step("Проверка наличия ошибки")
+    @allure.step("Checking for error")
     def is_error_displayed(self):
         return bool(self.driver.find_elements(*self.ERROR_MSG))
 
-    @allure.step("Проверяем, что форма невалидна при пустых обязательных полях")
+    @allure.step("Verifying the form is invalid when required fields are empty")
     def is_form_invalid(self):
         try:
             form = self.driver.find_element(By.XPATH, "//form")
@@ -79,25 +79,25 @@ class ContactPage(BasePage):
                 invalid_fields = self.driver.find_elements(By.CSS_SELECTOR,
                                                            "input:invalid, textarea:invalid, select:invalid")
                 allure.attach(
-                    f"Невалидные поля: {len(invalid_fields)}",
+                    f"Invalid fields: {len(invalid_fields)}",
                     name="HTML5 invalid fields",
                     attachment_type=allure.attachment_type.TEXT
                 )
                 return True
             return False
         except Exception as e:
-            allure.attach(str(e), name="Ошибка при проверке валидации формы",
+            allure.attach(str(e), name="Error during form validation check",
                           attachment_type=allure.attachment_type.TEXT)
             return False
 
-    @allure.step("Получаем href телефонной ссылки")
+    @allure.step("Getting phone link href")
     def get_phone_href(self):
         try:
             phone = self.driver.find_element(*self.PHONE_LINK)
             href = phone.get_attribute("href")
-            allure.attach(href, name="Телефонная ссылка", attachment_type=allure.attachment_type.TEXT)
+            allure.attach(href, name="Phone link", attachment_type=allure.attachment_type.TEXT)
             return href
         except Exception as e:
-            allure.attach(str(e), name="Ошибка при получении телефонной ссылки",
+            allure.attach(str(e), name="Error retrieving phone link",
                           attachment_type=allure.attachment_type.TEXT)
             raise
