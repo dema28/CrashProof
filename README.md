@@ -15,7 +15,7 @@ Testing is based on the **Page Object Model (POM)** using the following tools:
 - `pytest`
 - `selenium`
 - `allure-pytest`
-- `GitHub Actions` для CI/CD
+- `GitHub Actions` for CI/CD
 
 ---
 
@@ -55,15 +55,16 @@ CrashProof/
 │   ├── test_main_page_mobile.py
 │   └── test_not_found_page.py
 ├── configs/                       # (if used)
+│   └── test_data.py               # Data used in tests (e.g. form inputs, messages)
 ├── reports/                       # (optional, may store HTML reports)
 ├── allure-results/                # Allure: results
 ├── allure-report/                 # Allure: HTML reports
 ├── conftest.py                    # Shared fixtures, hooks, Allure logic
-├── requirements.txt               # Все зависимости проекта
+├── requirements.txt               # All project dependencies
 ├── README.md                      # Project description
 ├── README_AUTOTESTS.md            # Command table and local run guide
 ├── LICENSE.txt                    # License
-└── CrashProof.png                 # Логотип проекта
+└── CrashProof.png                 # Project logo
 ```
 
 ---
