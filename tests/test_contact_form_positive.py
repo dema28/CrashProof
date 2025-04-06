@@ -6,7 +6,7 @@ from pages.contact_page import ContactPage
 from configs.test_data import VALID_USER
 
 
-@allure.title("Форма обратной связи: Позитивный сценарий (валидные данные)")
+@allure.title("Contact Form: Positive Scenario (valid data)")
 def test_contact_form_positive(driver):
     page = ContactPage(driver)
     page.open()
@@ -22,10 +22,10 @@ def test_contact_form_positive(driver):
     try:
         page.select_subject("Dotaz na projekt")
     except:
-        pytest.fail("Выбор темы не удался")
+        pytest.fail("Topic selection failed")
 
     page.submit()
 
-    with allure.step("Проверка наличия сообщения об успешной отправке"):
-        assert page.is_success_alert_visible(), "Сообщение об успешной отправке не найдено"
+    with allure.step("Checking for success message"):
+        assert page.is_success_alert_visible(), "Success message not found"
 
