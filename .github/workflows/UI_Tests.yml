@@ -12,7 +12,7 @@ jobs:
       USER_EMAIL: ${{ secrets.USER_EMAIL }}
       USER_PHONE: ${{ secrets.USER_PHONE }}
       USER_MESSAGE: ${{ secrets.USER_MESSAGE }}
-      USER_SUBJECT: ${{ secrets.USER_SUBJECT }}
+
 
     steps:
       - name: Checkout repository
