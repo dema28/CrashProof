@@ -4,6 +4,7 @@ import allure
 import pytest
 
 from pages.contact_page import ContactPage
+from configs.test_data import VALID_USER
 
 
 @allure.title("Форма обратной связи: Позитивный сценарий (валидные данные)")
@@ -12,11 +13,11 @@ def test_contact_form_positive(driver):
     page.open()
     page.scroll_to_form()
     sleep(1)
-    page.fill_form(name="Danny",
-                   příjmení="Bellham",
-                   email="dbellham0@mozilla.org",
-                   telephon="(808)4191693",
-                   message="envisioneer impactful initiatives")
+    page.fill_form(name=VALID_USER["name"],
+                   příjmení=VALID_USER["surname"],
+                   email=VALID_USER["email"],
+                   telephon=VALID_USER["telephon"],
+                   message=VALID_USER["message"])
     try:
         page.select_subject("Dotaz na projekt")
     except:

@@ -4,6 +4,7 @@ import allure
 import pytest
 
 from pages.contact_page import ContactPage
+from configs.test_data import INVALID_USER
 
 @allure.title("Форма обратной связи: Негативный сценарий (пустые обязательные поля)")
 def test_contact_form_negative(driver):
@@ -11,11 +12,11 @@ def test_contact_form_negative(driver):
     page.open()
     page.scroll_to_form()
     sleep(1)
-    page.fill_form(name="",
-                   příjmení="Bellham",
-                   email="",
-                   telephon="(808)4191693",
-                   message="envisioneer impactful initiatives")
+    page.fill_form(name=INVALID_USER["name"],
+                   příjmení=INVALID_USER["surname"],
+                   email=INVALID_USER["email"],
+                   telephon=INVALID_USER["telephon"],
+                   message=INVALID_USER["message"])
     try:
         page.select_subject("Dotaz na projekt")
     except:
