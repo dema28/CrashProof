@@ -6,7 +6,7 @@ import pytest
 from pages.contact_page import ContactPage
 from configs.test_data import INVALID_USER
 
-@allure.title("Форма обратной связи: Негативный сценарий (пустые обязательные поля)")
+@allure.title("Contact Form: Negative Scenario (empty required fields)")
 def test_contact_form_negative(driver):
     page = ContactPage(driver)
     page.open()
@@ -20,7 +20,7 @@ def test_contact_form_negative(driver):
     try:
         page.select_subject("Dotaz na projekt")
     except:
-        pytest.fail("выбор темы не удался")
+        pytest.fail("Topic selection failed")
     page.submit()
 
-    assert page.is_form_invalid(), "Ожидалась невалидная форма при пустых полях"
+    assert page.is_form_invalid(), "Expected the form to be invalid with empty fields"
