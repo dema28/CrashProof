@@ -17,7 +17,7 @@ class ContactPage(BasePage):
     DROPDOWN_SUBJECT = (By.XPATH, "//select[@name='Předmět']")
     MESSAGE_INPUT = (By.XPATH, "//*[@name='Zpráva']")
     SUBMIT_BTN = (By.XPATH, "//button[@data-framer-name='Default']")
-    SUCCESS_ALERT = (By.XPATH, "//p[text()='Děkujeme']")
+    SUCCESS_ALERT = (By.XPATH, "//p[contains(@class, 'framer-text') and contains(text(), 'Děkujeme')]")
     ERROR_MSG = (By.XPATH, "//div[contains(@class,'error')]")
     PHONE_LINK = (By.XPATH, "//a[starts-with(@href, 'tel:')]")
 
