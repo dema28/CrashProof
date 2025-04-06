@@ -9,7 +9,6 @@ import logging
 from datetime import datetime
 
 
-# Безопасно очищаем содержимое папок Allure и удаляем error_log.txt
 @pytest.hookimpl(tryfirst=True)
 def pytest_sessionstart(session):
     project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -24,25 +23,22 @@ def pytest_sessionstart(session):
                     elif os.path.isdir(file_path):
                         shutil.rmtree(file_path)
                 except Exception as e:
-                    print(f"Не удалось удалить {file_path}. Ошибка: {e}")
+                    print(f"Failed to delete {file_path}. Error: {e}")
         else:
             os.makedirs(folder)
 
-    # Удаляем старый лог ошибок
     error_log = os.path.join(project_root, "error_log.txt")
     if os.path.exists(error_log):
         try:
             os.remove(error_log)
-            print("[INFO] Удалён старый error_log.txt")
+            print("[INFO] Old error_log.txt deleted")
         except Exception as e:
-            print(f"[WARNING] Не удалось удалить error_log.txt: {e}")
+            print(f"[WARNING] Failed to delete error_log.txt: {e}")
 
 
-# Добавляем корень проекта в PYTHONPATH
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), ".")))
 
 
-# Фикстура для WebDriver
 @pytest.fixture
 def driver():
     options = Options()
@@ -54,7 +50,6 @@ def driver():
     driver.quit()
 
 
-# Скриншот + лог ошибок в Allure и файл
 @pytest.hookimpl(hookwrapper=True)
 def pytest_runtest_makereport(item):
     outcome = yield
@@ -67,14 +62,13 @@ def pytest_runtest_makereport(item):
                 screenshot = driver.get_screenshot_as_png()
                 allure.attach(screenshot, name="screenshot", attachment_type=allure.attachment_type.PNG)
             except Exception as e:
-                print(f"Не удалось сделать скриншот: {e}")
+                print(f"Failed to take screenshot: {e}")
         project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
         error_log = os.path.join(project_root, "error_log.txt")
         with open(error_log, "a", encoding="utf-8") as f:
-            f.write(f"[{timestamp}] Ошибка в тесте: {item.nodeid}\n")
+            f.write(f"[{timestamp}] Error in test: {item.nodeid}\n")
 
 
-# Логирование начала и завершения тестов
 @pytest.fixture(autouse=True)
 def log_test_start_and_end(request):
     logging.getLogger().handlers.clear()
