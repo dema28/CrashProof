@@ -20,6 +20,7 @@ db.sqlite3
 venv/
 env/
 .venv/
+.env
 
 # Allure test reports
 allure-results/
