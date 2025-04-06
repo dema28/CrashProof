@@ -1,4 +1,5 @@
 import allure
+from selenium.common import TimeoutException
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -63,20 +64,6 @@ class ContactPage(BasePage):
             )
             return element.is_displayed()
         except TimeoutException:
-            # Скриншот в Allure
-            screenshot = self.driver.get_screenshot_as_png()
-            allure.attach(screenshot, name="no_success_alert", attachment_type=allure.attachment_type.PNG)
-
-            # Вывод всех p.framer-text
-            print("❌ Уведомление не найдено. Отладочная информация:")
-            paragraphs = self.driver.find_elements(By.CSS_SELECTOR, "p.framer-text")
-            for i, p in enumerate(paragraphs):
-                print(f"  [{i}] {p.text.strip()}")
-
-            # Сохраняем HTML страницу
-            with open("page_source.html", "w", encoding="utf-8") as f:
-                f.write(self.driver.page_source)
-
             return False
 
     @allure.step("Проверка наличия ошибки")
