@@ -12,11 +12,11 @@ class GalleryAlbumPage:
         self.image_items = (By.TAG_NAME, "img")
         self.back_button = (By.XPATH, "//*[@class='framer-1epduey-container']")
 
-    @allure.step("Подсчитываем количество изображений в альбоме")
+    @allure.step("Counting images in the album")
     def get_images_count(self):
         return len(self.driver.find_elements(*self.image_items))
 
-    @allure.step("Возвращаемся к списку альбомов")
+    @allure.step("Returning to album list")
     def go_back_to_gallery(self):
         wait = WebDriverWait(self.driver, 10)
         max_attempts = 3
@@ -29,7 +29,7 @@ class GalleryAlbumPage:
                 return
             except StaleElementReferenceException as e:
                 if attempt < max_attempts - 1:
-                    print(f"[RETRY] Попытка {attempt + 1}/3: пойман StaleElement при возврате в галерею. Повтор...")
+                    print(f"[RETRY] Attempt {attempt + 1}/3: Caught StaleElement when returning to gallery. Retrying...")
                     time.sleep(1)
                 else:
                     raise e
