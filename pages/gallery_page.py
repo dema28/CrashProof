@@ -16,7 +16,7 @@ class GalleryPage(BasePage):
         self.nav_link = (By.XPATH, "//a[@href='./albums']")
         self.album_links = (By.XPATH, "//a[contains(@href, 'albums/')]")
 
-    @allure.step("Переход на страницу галереи")
+    @allure.step("Navigate to the gallery page")
     def go_to_gallery(self):
         wait = WebDriverWait(self.driver, 10)
         max_attempts = 3
@@ -30,25 +30,25 @@ class GalleryPage(BasePage):
                 return
             except StaleElementReferenceException as e:
                 if attempt < max_attempts - 1:
-                    print(f"[RETRY] Попытка {attempt + 1}/3: пойман StaleElement. Повтор...")
+                    print(f"[RETRY] Attempt {attempt + 1}/3: Caught StaleElement. Retrying...")
                     time.sleep(1)
                 else:
                     raise e
 
-    @allure.step("Получаем все альбомы")
+    @allure.step("Retrieving all albums")
     def get_album_elements(self):
         WebDriverWait(self.driver, 10).until(
             EC.presence_of_all_elements_located(self.album_links)
         )
         return self.driver.find_elements(*self.album_links)
 
-    @allure.step("Открываем альбом по индексу {index}")
+    @allure.step("Opening album by index {index}")
     def open_album_by_index(self, index):
         albums = self.get_album_elements()
         if index < len(albums):
             ActionChains(self.driver).move_to_element(albums[index]).click().perform()
 
-    @allure.step("Прокручиваем к альбому по индексу {index}")
+    @allure.step("Scrolling to album by index {index}")
     def scroll_to_album_by_index(self, index):
         wait = WebDriverWait(self.driver, 10)
         wait.until(EC.presence_of_all_elements_located(self.album_links))
