@@ -24,7 +24,8 @@ def test_contact_form_positive(driver):
         pytest.fail("выбор темы не удался")
     page.submit()
 
-    assert page.is_success_alert_visible(), "Сообщение об успешной отправке не найдено"
+    with allure.step("Проверка наличия сообщения об успешной отправке"):
+        assert page.is_success_alert_visible(), "Сообщение об успешной отправке не найдено"
 
 
 
