@@ -4,3 +4,4 @@ pytest
 allure-pytest
 allure-python-commons
 requests
+python-dotenv
